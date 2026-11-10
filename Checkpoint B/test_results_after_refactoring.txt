@@ -1,0 +1,51 @@
+test_delivery_threshold_at_10000_cents_after_discount (test_service.BoundaryTests.test_delivery_threshold_at_10000_cents_after_discount) ... ok
+test_duplicate_lines_combined_over_stock_are_rejected (test_service.BoundaryTests.test_duplicate_lines_combined_over_stock_are_rejected) ... FAIL
+test_ordering_all_remaining_stock_then_one_more (test_service.BoundaryTests.test_ordering_all_remaining_stock_then_one_more) ... ok
+test_quantity_limits (test_service.BoundaryTests.test_quantity_limits) ... ok
+test_student_discount_applies_at_exactly_5000_cents (test_service.BoundaryTests.test_student_discount_applies_at_exactly_5000_cents) ... FAIL
+test_cancelling_a_cancelled_order_changes_nothing (test_service.InvalidInputTests.test_cancelling_a_cancelled_order_changes_nothing) ... FAIL
+test_malformed_save_file_raises_instead_of_resetting (test_service.InvalidInputTests.test_malformed_save_file_raises_instead_of_resetting) ... ok
+test_non_integer_quantities_are_rejected (test_service.InvalidInputTests.test_non_integer_quantities_are_rejected) ... ok
+test_place_order_deducts_stock_and_records_order (test_service.NormalBehaviourTests.test_place_order_deducts_stock_and_records_order) ... ok
+test_quote_returns_full_line_details_for_multiple_items (test_service.NormalBehaviourTests.test_quote_returns_full_line_details_for_multiple_items) ... ok
+test_cli_json_output_and_exit_statuses (test_service.PreservedBehaviourTests.test_cli_json_output_and_exit_statuses) ... ok
+test_invalid_requests_leave_saved_data_unchanged (test_service.PreservedBehaviourTests.test_invalid_requests_leave_saved_data_unchanged) ... ok
+test_menu_declined_placement_saves_nothing (test_service.PreservedBehaviourTests.test_menu_declined_placement_saves_nothing) ... ok
+test_quote_and_placed_order_have_identical_pricing (test_service.PreservedBehaviourTests.test_quote_and_placed_order_have_identical_pricing) ... ok
+test_quote_does_not_save_or_use_an_order_id (test_service.PreservedBehaviourTests.test_quote_does_not_save_or_use_an_order_id) ... ok
+test_cancel_order_restores_stock (test_smoke.OrderSmokeTests.test_cancel_order_restores_stock) ... ok
+test_order_can_be_reopened (test_smoke.OrderSmokeTests.test_order_can_be_reopened) ... ok
+test_regular_pickup_quote (test_smoke.OrderSmokeTests.test_regular_pickup_quote) ... ok
+test_student_delivery_quote (test_smoke.OrderSmokeTests.test_student_delivery_quote) ... ok
+
+======================================================================
+FAIL: test_duplicate_lines_combined_over_stock_are_rejected (test_service.BoundaryTests.test_duplicate_lines_combined_over_stock_are_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\Programming\SE\software-rescue-mission\tests\test_service.py", line 109, in test_duplicate_lines_combined_over_stock_are_rejected
+    with self.assertRaises(ValueError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_student_discount_applies_at_exactly_5000_cents (test_service.BoundaryTests.test_student_discount_applies_at_exactly_5000_cents)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\Programming\SE\software-rescue-mission\tests\test_service.py", line 79, in test_student_discount_applies_at_exactly_5000_cents
+    self.assertEqual(quote["discount_cents"], 500)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 500
+
+======================================================================
+FAIL: test_cancelling_a_cancelled_order_changes_nothing (test_service.InvalidInputTests.test_cancelling_a_cancelled_order_changes_nothing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\Programming\SE\software-rescue-mission\tests\test_service.py", line 132, in test_cancelling_a_cancelled_order_changes_nothing
+    self.assertEqual(self.stock("mug"), 8)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 9 != 8
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.069s
+
+FAILED (failures=3)

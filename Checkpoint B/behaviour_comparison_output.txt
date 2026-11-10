@@ -1,0 +1,16 @@
+service    10000 records compared (4364 raised an error, 1168 defect cases left out): 0 differences
+rounding     176 records compared: 0 differences
+cli           20 records compared: 0 differences
+menu           7 records compared: 0 differences
+Baseline commit 7714d90 vs working tree, outside the known defects: IDENTICAL behaviour
+
+Known defects (a change here is expected once the defect is fixed):
+- student discount at a subtotal of exactly 5,000 cents: CHANGED
+    baseline:     {"subtotal_cents": 5000, "discount_cents": 0, "total_cents": 5000}
+    working tree: {"subtotal_cents": 5000, "discount_cents": 500, "total_cents": 4500}
+- bag x 3 on two lines when 4 bags are in stock: CHANGED
+    baseline:     {"quote": "accepted", "place_order": "accepted", "bag_stock_afterwards": -2}
+    working tree: {"quote": "Not enough stock for bag.", "place_order": "Not enough stock for bag.", "bag_stock_afterwards": 4}
+- cancelling the same order twice (mug stock starts at 8): CHANGED
+    baseline:     {"second_cancel_status": "cancelled", "mug_stock_afterwards": 9}
+    working tree: {"second_cancel_status": "cancelled", "mug_stock_afterwards": 8}
