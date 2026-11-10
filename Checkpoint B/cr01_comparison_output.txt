@@ -1,0 +1,6 @@
+service    10000 records:  345 differ, 0 left after restoring the old wording
+rounding     176 records:    0 differ, 0 left after restoring the old wording
+cli           20 records:    7 differ, 0 left after restoring the old wording
+menu           7 records:    6 differ, 0 left after restoring the old wording
+defects        3 records:    0 differ, 0 left after restoring the old wording
+Task 4 commit 6bbf807 vs working tree: 358 differences, all of them CR-01 wording only

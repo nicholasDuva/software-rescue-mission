@@ -7,8 +7,8 @@ REGULAR, STUDENT = "regular", "student"
 CUSTOMER_TYPES = (REGULAR, STUDENT)
 DEFAULT_CUSTOMER_TYPE = REGULAR
 
-PICKUP, DELIVERY = "pickup", "delivery"
-FULFILLMENT_OPTIONS = (PICKUP, DELIVERY)
+PICKUP, DELIVERY, EXPRESS = "pickup", "delivery", "express"
+FULFILLMENT_OPTIONS = (PICKUP, DELIVERY, EXPRESS)
 DEFAULT_FULFILLMENT = PICKUP
 
 MIN_QUANTITY = 1
@@ -19,6 +19,7 @@ STUDENT_DISCOUNT_PERCENT = 10
 
 DELIVERY_FEE_CENTS = 600
 FREE_DELIVERY_THRESHOLD_CENTS = 10000
+EXPRESS_FEE_CENTS = 1200  # flat fee, never waived (CR-01)
 
 STATUS_PLACED = "placed"
 STATUS_CANCELLED = "cancelled"
@@ -31,6 +32,26 @@ def _percentage_of(amount_cents, percent):
     "round down" into "round to nearest".
     """
     return (amount_cents * percent + 50) // 100
+
+
+def _delivery_charge_cents(fulfillment, discounted_subtotal_cents):
+    """Return the delivery charge for a fulfillment option.
+
+    The charge is added after the student discount, so the discount never
+    applies to it.
+    """
+    if fulfillment == EXPRESS:
+        return EXPRESS_FEE_CENTS
+    if fulfillment == DELIVERY and discounted_subtotal_cents < FREE_DELIVERY_THRESHOLD_CENTS:
+        return DELIVERY_FEE_CENTS
+    return 0
+
+
+def _list_choices(choices):
+    """Format choices for a message: "a or b", or "a, b or c"."""
+    if len(choices) == 1:
+        return choices[0]
+    return ", ".join(choices[:-1]) + " or " + choices[-1]
 
 
 def _find_product(state, product_id):
@@ -82,9 +103,9 @@ class OrderService:
         Raises ValueError for an invalid request; never changes state.
         """
         if customer_type not in CUSTOMER_TYPES:
-            raise ValueError(f"Customer type must be {' or '.join(CUSTOMER_TYPES)}.")
+            raise ValueError(f"Customer type must be {_list_choices(CUSTOMER_TYPES)}.")
         if fulfillment not in FULFILLMENT_OPTIONS:
-            raise ValueError(f"Fulfillment must be {' or '.join(FULFILLMENT_OPTIONS)}.")
+            raise ValueError(f"Fulfillment must be {_list_choices(FULFILLMENT_OPTIONS)}.")
         if not isinstance(items, list) or not items:
             raise ValueError("An order must contain at least one item.")
         lines = []
@@ -116,9 +137,7 @@ class OrderService:
         discount = 0
         if customer_type == STUDENT and subtotal >= STUDENT_DISCOUNT_THRESHOLD_CENTS:
             discount = _percentage_of(subtotal, STUDENT_DISCOUNT_PERCENT)
-        delivery = 0
-        if fulfillment == DELIVERY and subtotal - discount < FREE_DELIVERY_THRESHOLD_CENTS:
-            delivery = DELIVERY_FEE_CENTS
+        delivery = _delivery_charge_cents(fulfillment, subtotal - discount)
         return {
             "customer_type": customer_type,
             "fulfillment": fulfillment,

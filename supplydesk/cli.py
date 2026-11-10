@@ -6,8 +6,14 @@ from pathlib import Path
 import sys
 
 from supplydesk.service import (
-    CUSTOMER_TYPES, DEFAULT_CUSTOMER_TYPE, DEFAULT_FULFILLMENT, FULFILLMENT_OPTIONS,
-    OrderService,
+    CUSTOMER_TYPES, DEFAULT_CUSTOMER_TYPE, DEFAULT_FULFILLMENT, DELIVERY_FEE_CENTS,
+    EXPRESS_FEE_CENTS, FREE_DELIVERY_THRESHOLD_CENTS, FULFILLMENT_OPTIONS, OrderService,
+)
+
+FULFILLMENT_HELP = (
+    f"%(choices)s (default: %(default)s). pickup is free; delivery costs "
+    f"{DELIVERY_FEE_CENTS} cents, free from {FREE_DELIVERY_THRESHOLD_CENTS} cents after "
+    f"discount; express always costs {EXPRESS_FEE_CENTS} cents"
 )
 
 
@@ -35,7 +41,8 @@ def build_parser():
         command.add_argument(
             "--customer", choices=CUSTOMER_TYPES, default=DEFAULT_CUSTOMER_TYPE)
         command.add_argument(
-            "--fulfillment", choices=FULFILLMENT_OPTIONS, default=DEFAULT_FULFILLMENT)
+            "--fulfillment", choices=FULFILLMENT_OPTIONS, default=DEFAULT_FULFILLMENT,
+            help=FULFILLMENT_HELP)
         command.add_argument("--item", type=parse_item, action="append", required=True)
     commands.add_parser("orders", help="list orders in placement order")
     show = commands.add_parser("show", help="show one order")
